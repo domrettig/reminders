@@ -13,7 +13,7 @@ def remind():
   with open(os.path.expanduser('~/reminders.txt'),'r') as f:
     lines = f.readlines()
 
-  lines = [str(i+1)+': '+line for i,line in enumerate(lines)]
+  lines = [str(i)+': '+line for i,line in enumerate(lines)]
   body = ''.join(lines)
 
   client = MessageClient()
