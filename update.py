@@ -11,6 +11,9 @@ def update():
   parser.add_argument('number',type=int,help='position in list to add or delete')
   args = parser.parse_args()
   
+  if args.number < 1:
+    raise argparse.ArgumentTypeError('Enter a number greater than 0')
+
   with open(FILE,'r') as f:
     lines = f.readlines()
 

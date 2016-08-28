@@ -17,7 +17,7 @@ def remind():
   body = ''.join(lines)
 
   client = MessageClient()
-  client.send_message(body,'19253232649')
+  client.send_message(body, os.environ.get('USER_PHONE_NUMBER'))
 
 if __name__ == '__main__':
   remind()
