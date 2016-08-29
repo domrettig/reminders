@@ -1,5 +1,8 @@
 from twilio.rest import TwilioRestClient
 import os
+from apscheduler.schedulers.blocking import BlockingScheduler
+
+sched = BlockingScheduler()
 
 class MessageClient(object):
   def __init__(self):
@@ -9,6 +12,7 @@ class MessageClient(object):
   def send_message(self, body, to):
     self.twilio_client.messages.create(body=body, to=to, from_=self.twilio_number)
 
+@sched.scheduled_job('cron',minute='0',hour='2,13,21')
 def remind():
   with open(os.path.expanduser('~/reminders.txt'),'r') as f:
     lines = f.readlines()
@@ -19,5 +23,4 @@ def remind():
   client = MessageClient()
   client.send_message(body, os.environ.get('USER_PHONE_NUMBER'))
 
-if __name__ == '__main__':
-  remind()
+sched.start()
