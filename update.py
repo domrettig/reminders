@@ -3,7 +3,20 @@ import argparse
 
 FILE = os.path.expanduser('~/reminders.txt')
 
-def update():
+def update(op, num=None, text=None):
+  with open(FILE, 'r') as f:
+    lines = f.readlines()
+
+  if op == 'add':
+    lines.append(text+'\n')
+  else:
+    del lines[num]
+
+  with open(FILE, 'w') as f:
+    for line in lines:
+      f.write(line)
+
+def update_args():
   parser = argparse.ArgumentParser()
   group = parser.add_mutually_exclusive_group(required=True)
   group.add_argument('-a')
