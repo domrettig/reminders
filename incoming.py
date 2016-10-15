@@ -14,7 +14,7 @@ def check():
 def inbound_sms():
     inbound_message = request.forms.get('Body')
     try:
-      allowable_patterns = [re.compile(r'(add) ((\S+ )*(\S+))'),re.compile(r'delete [0-9]+')]
+      allowable_patterns = [re.compile(r'(add) ((\S+ )*(\S+))'),re.compile(r'(delete) ([0-9]+)')]
       operation = info = None
       for p in allowable_patterns:
         match = re.search(p, inbound_message)
