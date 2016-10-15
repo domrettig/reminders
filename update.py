@@ -10,7 +10,7 @@ def update(op, info):
   if op == 'add':
     lines.append(info+'\n')
   else:
-    del lines[info]
+    del lines[int(info)]
 
   with open(FILE, 'w') as f:
     for line in lines:
