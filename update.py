@@ -3,14 +3,14 @@ import argparse
 
 FILE = os.path.expanduser('~/reminders.txt')
 
-def update(op, num=None, text=None):
+def update(op, info):
   with open(FILE, 'r') as f:
     lines = f.readlines()
 
   if op == 'add':
-    lines.append(text+'\n')
+    lines.append(info+'\n')
   else:
-    del lines[num]
+    del lines[info]
 
   with open(FILE, 'w') as f:
     for line in lines:

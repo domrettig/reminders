@@ -1,6 +1,7 @@
 from bottle import post, request, response, route, run
 from twilio import twiml
 from update import update
+import re
 
 class BadInput(Exception):
   pass
@@ -13,16 +14,20 @@ def check():
 def inbound_sms():
     inbound_message = request.forms.get('Body')
     try:
-      operation = inbound_message.split(' ')[0]
-      if operation == 'add':
-        text = inbound_message.split(' ')[1:]
-        if not text:
-          raise BadInput
-        update(operation, text=text)
-      else:
-        num = int(inbound_message.split(' ')[1])
-        update(operation, num=num)
-    except IndexError, BadInput:
+      allowable_patterns = [re.compile(r'(add) ((\S+ )*(\S+))'),re.compile(r'delete [0-9]+')]
+      operation = info = None
+      for p in allowable_patterns:
+        match = re.search(p, inbound_message)
+        if match:
+          operation = match.group(1)
+          info = match.group(2)
+
+      if not operation or not info:
+        raise BadInput
+
+      update(operation, info)
+
+    except BadInput:
       twiml_response = twiml.Response()
       twiml_response.message('Bad input. Try again.')
       response.content_type = 'application/xml'
